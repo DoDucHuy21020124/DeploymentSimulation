@@ -1,0 +1,4 @@
+# Ignore folders
+weights/
+opencv/
+TensorRT-10.13.0.35/
