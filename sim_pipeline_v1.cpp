@@ -165,17 +165,6 @@ static std::vector<std::filesystem::path> listImages(const std::filesystem::path
     return out;
 }
 
-static std::vector<std::filesystem::path> circularTwenty(const std::vector<std::filesystem::path>& imgs) {
-    std::vector<std::filesystem::path> out;
-    out.reserve(20);
-    if (imgs.size() >= 20) {
-        out.insert(out.end(), imgs.begin(), imgs.begin() + 20);
-        return out;
-    }
-    for (int i = 0; i < 20; ++i) out.push_back(imgs[static_cast<size_t>(i) % imgs.size()]);
-    return out;
-}
-
 struct LetterboxInfo {
     float ratio;
     int top;
@@ -483,8 +472,8 @@ int main(int argc, char** argv) {
 
         Args args = parseConfig(argc, argv);
 
-        const auto det_seed = circularTwenty(listImages(args.det_folder));
-        const auto seg_seed = circularTwenty(listImages(args.seg_folder));
+        const auto det_seed = listImages(args.det_folder);
+        const auto seg_seed = listImages(args.seg_folder);
 
         BoundedQueue<cv::Mat> det_queue(static_cast<size_t>(args.det_buffer_capacity));
         BoundedQueue<cv::Mat> seg_queue(static_cast<size_t>(args.seg_buffer_capacity));

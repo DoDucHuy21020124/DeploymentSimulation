@@ -26,12 +26,6 @@ def list_images(folder: Path) -> List[Path]:
     return images
 
 
-def circular_twenty(paths: List[Path]) -> List[Path]:
-    if len(paths) >= 20:
-        return paths[:20]
-    return [paths[i % len(paths)] for i in range(20)]
-
-
 def letterbox(image: np.ndarray, target_h: int, target_w: int, pad_value: int = 0) -> np.ndarray:
     h, w = image.shape[:2]
     r = min(target_h / float(h), target_w / float(w))
@@ -186,8 +180,8 @@ def main() -> None:
     ap.add_argument("--device", type=int, default=0)
     args = ap.parse_args()
 
-    det_seed = circular_twenty(list_images(Path(args.det_folder)))
-    seg_seed = circular_twenty(list_images(Path(args.seg_folder)))
+    det_seed = list_images(Path(args.det_folder))
+    seg_seed = list_images(Path(args.seg_folder))
 
     det_q: queue.Queue = queue.Queue(maxsize=max(1, args.det_buffer_capacity))
     seg_q: queue.Queue = queue.Queue(maxsize=max(1, args.seg_buffer_capacity))
